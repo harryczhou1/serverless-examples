@@ -1,5 +1,4 @@
 FROM pytorch/pytorch:2.2.1-cuda12.1-cudnn8-runtime
-
 WORKDIR /
 
 ARG MODEL_NAME=mistralai/Mistral-7B-Instruct-v0.2
@@ -14,12 +13,11 @@ ENV DEVICE=${DEVICE}
 ENV MODEL_DIR=${MODEL_DIR}
 ENV HF_TOKEN=${HF_TOKEN}
 
-COPY requirements.txt /requirements.txt
-COPY scripts/download_hf_model.py /download_hf_model.py
+COPY deploy_runpod/requirements.txt /requirements.txt
+COPY deploy_runpod/scripts/download_hf_model.py /download_hf_model.py
+COPY deploy_runpod/src /src
 
 RUN python3 -m pip install --upgrade -r /requirements.txt --no-cache-dir && \
     python3 /download_hf_model.py
-
-COPY deploy_runpod/src /src
 
 CMD ["python3", "-u", "/src/handler.py"]
