@@ -1,4 +1,4 @@
-DEFAULT_MODEL_DIR = "/model"
+DEFAULT_MODEL_DIR = "/src/model"
 DEFAULT_DEVICE="cuda"
 DEFAULT_MODEL_NAME="mistralai/Mistral-7B-Instruct-v0.2"
 DEFAULT_TOKENIZER_NAME="mistralai/Mistral-7B-Instruct-v0.2"
