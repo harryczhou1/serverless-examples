@@ -1,7 +1,3 @@
-DEFAULT_MODEL_DIR = "/src/model"
-DEFAULT_DEVICE="cuda"
-DEFAULT_MODEL_NAME="mistralai/Mistral-7B-v0.1"
-DEFAULT_TOKENIZER_NAME="mistralai/Mistral-7B-v0.1"
-
-DEFAULT_MAX_CONCURRENCY = 300
-DEFAULT_MIN_BATCH_SIZE = 1
+DEFAULT_MODEL_DIR = "/model"   # local model cache
+DEFAULT_MODEL_NAME = "mistralai/Mistral-7B-v0.1"
+DEFAULT_DEVICE = "cuda"
