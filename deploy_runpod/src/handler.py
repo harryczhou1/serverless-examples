@@ -1,31 +1,36 @@
 import runpod
+import asyncio
 from engine import HFEngine
-from constants import DEFAULT_MAX_CONCURRENCY
 
+engine = HFEngine()
 
-class JobInput:
-    def __init__(self, job):
-        self.llm_input = job.get("messages")
-        self.stream = job.get("stream", False)
-        self.sampling_params = job.get(
-            "sampling_params",
-            {"temperature": 0.1, "top_p": 0.7, "max_new_tokens": 512},
-        )
-
-
-async def handler(job):
-    engine = HFEngine()
-    job_input = JobInput(job["input"])
-    async for delta in engine.stream(
-        chat_input=job_input.llm_input,
-        generation_parameters=job_input.sampling_params,
-    ):
-        yield delta
-
-
-runpod.serverless.start(
+async def handler(event):
+    """
+    RunPod Serverless handler.
+    Expects input:
     {
-        "handler": handler,
-        "concurrency_modifier": lambda x: DEFAULT_MAX_CONCURRENCY,
+      "input": {
+        "text": "hello",
+        "params": {"max_new_tokens": 100}
+      }
     }
-)
+    """
+    user_input = event.get("input", {}).get("text", "")
+    params = event.get("input", {}).get("params", {})
+
+    default_params = {
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "do_sample": True,
+        "max_new_tokens": 128,
+    }
+    default_params.update(params)
+
+    output_tokens = []
+    async for chunk in engine.stream(user_input, default_params):
+        if "delta" in chunk:
+            output_tokens.append(chunk["delta"])
+
+    return {"output": "".join(output_tokens)}
+
+runpod.serverless.start({"handler": handler})
