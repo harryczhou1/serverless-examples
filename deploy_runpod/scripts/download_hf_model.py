@@ -2,17 +2,15 @@ import os
 import sys
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# Ensure src folder is in the Python path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
+# Add src folder to Python path
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 from constants import DEFAULT_MODEL_DIR
 
-# Environment variables
 model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
 model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
 hf_token = os.getenv("HF_TOKEN", None)
 
-# Make sure the model directory exists
 os.makedirs(model_dir, exist_ok=True)
 
 print(f"Downloading model '{model_name}' to '{model_dir}' ...")
