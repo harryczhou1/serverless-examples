@@ -1,36 +1,13 @@
-import runpod
+import os
 import asyncio
 from engine import HFEngine
 
 engine = HFEngine()
 
-async def handler(event):
-    """
-    RunPod Serverless handler.
-    Expects input:
-    {
-      "input": {
-        "text": "hello",
-        "params": {"max_new_tokens": 100}
-      }
-    }
-    """
-    user_input = event.get("input", {}).get("text", "")
-    params = event.get("input", {}).get("params", {})
+async def handler():
+    chat_input = [{"role": "user", "content": "Hello, test streaming."}]
+    async for token in engine.stream(chat_input, {"max_new_tokens": 100, "temperature": 0.7}):
+        print(token, flush=True)
 
-    default_params = {
-        "temperature": 0.7,
-        "top_p": 0.95,
-        "do_sample": True,
-        "max_new_tokens": 128,
-    }
-    default_params.update(params)
-
-    output_tokens = []
-    async for chunk in engine.stream(user_input, default_params):
-        if "delta" in chunk:
-            output_tokens.append(chunk["delta"])
-
-    return {"output": "".join(output_tokens)}
-
-runpod.serverless.start({"handler": handler})
+if __name__ == "__main__":
+    asyncio.run(handler())
