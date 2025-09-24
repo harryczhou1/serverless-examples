@@ -1,21 +1,14 @@
 import os
-from huggingface_hub import snapshot_download
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from constants import DEFAULT_MODEL_NAME, DEFAULT_MODEL_DIR
 
+model_name = os.getenv("MODEL_NAME", DEFAULT_MODEL_NAME)
+model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
 
-def download_model_to_folder(model_id: str, model_dir: str):
-    os.makedirs(model_dir, exist_ok=True)
-    snapshot_download(
-        model_id,
-        local_dir=model_dir,
-        ignore_patterns=["*.pt"],  # Using safetensors
-    )
+print(f"⬇️ Downloading {model_name} into {model_dir}...")
 
+os.makedirs(model_dir, exist_ok=True)
+AutoTokenizer.from_pretrained(model_name).save_pretrained(model_dir)
+AutoModelForCausalLM.from_pretrained(model_name).save_pretrained(model_dir)
 
-if __name__ == "__main__":
-
-    # Run this script inside folder deploy_runpod like this
-    # python3 scripts/download_hf_model.py
-
-    download_model_to_folder(
-        model_id="mistralai/Mistral-7B-v0.1", model_dir="./model"
-    )
+print("✅ Model saved.")
