@@ -2,8 +2,8 @@ import os
 import sys
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# Add src folder to Python path
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+# Ensure the repo's src folder is on Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
 from constants import DEFAULT_MODEL_DIR
 
@@ -13,16 +13,16 @@ hf_token = os.getenv("HF_TOKEN", None)
 
 os.makedirs(model_dir, exist_ok=True)
 
-print(f"Downloading model '{model_name}' to '{model_dir}' ...")
+print(f"⬇️ Downloading model '{model_name}' to '{model_dir}' ...")
 
 # Download tokenizer
-tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
+tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
 tokenizer.save_pretrained(model_dir)
-print("Tokenizer downloaded and saved.")
+print("✅ Tokenizer downloaded and saved.")
 
 # Download model
-model = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=hf_token)
+model = AutoModelForCausalLM.from_pretrained(model_name, token=hf_token)
 model.save_pretrained(model_dir)
-print("Model downloaded and saved.")
+print("✅ Model downloaded and saved.")
 
-print("✅ Download complete!")
+print("🎉 Download complete!")
