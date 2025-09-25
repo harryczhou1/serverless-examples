@@ -6,8 +6,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
 sys.path.insert(0, SRC_DIR)  # force-add it
 
-# Now we can import your file
-import app_constants
+
+import constants
 
 model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
 model_dir = os.getenv("MODEL_DIR", app_constants.DEFAULT_MODEL_DIR)
