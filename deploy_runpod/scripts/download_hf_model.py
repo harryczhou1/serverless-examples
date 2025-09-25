@@ -2,15 +2,15 @@ import os
 import sys
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# Force import from your repo's src folder
+# Compute absolute path to ../src/
 SRC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
-if SRC_DIR not in sys.path:
-    sys.path.insert(0, SRC_DIR)
+sys.path.insert(0, SRC_DIR)  # force-add it
 
-from app_constants import DEFAULT_MODEL_DIR  # now found inside src/
+# Now we can import your file
+import app_constants
 
 model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
-model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
+model_dir = os.getenv("MODEL_DIR", app_constants.DEFAULT_MODEL_DIR)
 hf_token = os.getenv("HF_TOKEN", None)
 
 os.makedirs(model_dir, exist_ok=True)
