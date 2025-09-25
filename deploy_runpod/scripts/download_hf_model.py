@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 # Ensure the repo's src folder is on Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
-from constants import DEFAULT_MODEL_DIR
+from constants import MODEL_DIR
 
 model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
 model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
