@@ -10,7 +10,7 @@ sys.path.insert(0, SRC_DIR)  # force-add it
 import constants
 
 model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
-model_dir = os.getenv("MODEL_DIR", constants.DEFAULT_MODEL_DIR)
+model_dir = os.getenv("MODEL_DIR", constants.MODEL_DIR)
 hf_token = os.getenv("HF_TOKEN", None)
 
 os.makedirs(model_dir, exist_ok=True)
