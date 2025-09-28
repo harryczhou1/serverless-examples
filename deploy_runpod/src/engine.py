@@ -1,7 +1,7 @@
 import os
 import logging
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
-from app_constants import DEFAULT_MODEL_DIR  # or constants
+from constants import DEFAULT_MODEL_DIR  # or constants
 
 class HFEngine:
     def __init__(self):
