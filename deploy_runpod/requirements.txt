@@ -6,7 +6,7 @@ transformers>=4.40
 accelerate
 
 # PyTorch (GPU version)
-torch==2.1.0+cu121
+torch
 
 # Optional but recommended
 sentencepiece
