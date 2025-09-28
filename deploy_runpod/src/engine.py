@@ -1,15 +1,16 @@
 import os
 import logging
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
+from constants import DEFAULT_MODEL_DIR
 
 class HFEngine:
     def __init__(self):
-        model_dir = "/model"  # always load from local /model
+        model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
         device = os.getenv("DEVICE", "cuda")
 
         logging.info(f"🚀 Loading model from {model_dir} on {device}")
 
-        # Load tokenizer + model from local files only
+        # Load tokenizer + model from local folder
         self.tokenizer = AutoTokenizer.from_pretrained(model_dir, local_files_only=True)
         self.model = AutoModelForCausalLM.from_pretrained(model_dir, local_files_only=True).to(device)
         self.streamer = TextIteratorStreamer(self.tokenizer)
