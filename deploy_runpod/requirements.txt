@@ -1,4 +1,14 @@
-torch
-transformers
+# RunPod SDK
+runpod
+
+# Hugging Face model loading
+transformers>=4.40
 accelerate
-bitsandbytes
+
+# PyTorch (GPU version)
+torch>=2.1.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+
+# Optional but recommended
+sentencepiece
+protobuf
+tokenizers
