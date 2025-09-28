@@ -7,7 +7,7 @@ SRC = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
 if SRC not in sys.path:
     sys.path.insert(0, SRC)
 
-from app_constants import DEFAULT_MODEL_DIR  # or constants if you didn’t rename
+from constants import DEFAULT_MODEL_DIR  # or constants if you didn’t rename
 
 model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
 model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
