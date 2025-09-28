@@ -1,22 +1,23 @@
 import os
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# Constants
-MODEL_NAME = "mistralai/Mistral-7B-v0.1"
-MODEL_DIR = os.path.join(".", "models", "mistral")  # local folder
-HF_TOKEN = os.getenv("HF_TOKEN", None)  # optional HuggingFace token
+# Which model to pull from Hugging Face Hub
+model_name = os.getenv("MODEL_NAME", "mistralai/Mistral-7B-v0.1")
+model_dir = "/model"   # fixed location inside container
+hf_token = os.getenv("HF_TOKEN", None)
 
-os.makedirs(MODEL_DIR, exist_ok=True)
-print(f"Downloading {MODEL_NAME} to {MODEL_DIR}...")
+# Ensure /model exists
+os.makedirs(model_dir, exist_ok=True)
+print(f"⬇️ Downloading {model_name} to {model_dir}")
 
 # Download tokenizer
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_auth_token=HF_TOKEN)
-tokenizer.save_pretrained(MODEL_DIR)
-print("Tokenizer saved.")
+tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
+tokenizer.save_pretrained(model_dir)
+print("✅ Tokenizer saved.")
 
 # Download model
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, use_auth_token=HF_TOKEN)
-model.save_pretrained(MODEL_DIR)
-print("Model saved.")
+model = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=hf_token)
+model.save_pretrained(model_dir)
+print("✅ Model saved.")
 
-print("✅ Download complete!")
+print("🎉 Download complete! Everything is now in /model")
