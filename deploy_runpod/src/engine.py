@@ -1,7 +1,9 @@
 import os
 import logging
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
-from constants import DEFAULT_MODEL_DIR  # or constants
+from threading import Thread
+
+DEFAULT_MODEL_DIR = os.path.join(".", "models", "mistral")
 
 class HFEngine:
     def __init__(self):
@@ -10,19 +12,23 @@ class HFEngine:
 
         logging.info(f"Loading model from {model_dir} on {device}")
 
-        # Load from local model folder
+        # Load from local folder
         self.tokenizer = AutoTokenizer.from_pretrained(model_dir)
         self.model = AutoModelForCausalLM.from_pretrained(model_dir).to(device)
-        self.streamer = TextIteratorStreamer(self.tokenizer)
+        self.streamer = None
 
     async def stream(self, chat_input, generation_parameters):
-        # existing streaming code …
-        input_ids = self.tokenizer.apply_chat_template(
-            conversation=chat_input, tokenize=True, return_tensors="pt"
-        ).to(self.model.device)
+        from transformers import TextIteratorStreamer
+
+        # Setup streamer
+        self.streamer = TextIteratorStreamer(self.tokenizer)
+        input_ids = self.tokenizer(chat_input, return_tensors="pt").input_ids.to(self.model.device)
+
+        # Run generation in background thread
         generation_kwargs = dict(input_ids=input_ids, streamer=self.streamer, **generation_parameters)
-        from threading import Thread
         thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
         thread.start()
+
+        # Yield tokens as they stream
         for token in self.streamer:
             yield {"status": 200, "delta": token}
