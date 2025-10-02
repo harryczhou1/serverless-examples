@@ -1,18 +1,23 @@
 import os
 import logging
+from pathlib import Path
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
 from constants import DEFAULT_MODEL_DIR
 
 class HFEngine:
     def __init__(self):
-        model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
+        # Ensure model_dir is a proper local path
+        model_dir = Path(os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR))
         device = os.getenv("DEVICE", "cuda")
 
         logging.info(f"🚀 Loading model from {model_dir} on {device}")
 
+        # Convert Path to string for transformers
+        model_path_str = str(model_dir.resolve())
+
         # Load tokenizer + model from local folder
-        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, local_files_only=True)
-        self.model = AutoModelForCausalLM.from_pretrained(model_dir, local_files_only=True).to(device)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path_str, local_files_only=True)
+        self.model = AutoModelForCausalLM.from_pretrained(model_path_str, local_files_only=True).to(device)
         self.streamer = TextIteratorStreamer(self.tokenizer)
 
     async def stream(self, chat_input, generation_parameters):
