@@ -6,14 +6,19 @@ from constants import DEFAULT_MODEL_DIR
 
 class HFEngine:
     def __init__(self):
-        # Ensure model_dir is a proper local path
-        model_dir = Path(os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR))
+        raw_model_dir = os.getenv("MODEL_DIR", DEFAULT_MODEL_DIR)
+        model_dir = Path(raw_model_dir).expanduser().resolve()
         device = os.getenv("DEVICE", "cuda")
 
         logging.info(f"🚀 Loading model from {model_dir} on {device}")
 
-        # Convert Path to string for transformers
-        model_path_str = str(model_dir.resolve())
+        # Sanity check: make sure config.json exists
+        config_file = model_dir / "config.json"
+        if not config_file.exists():
+            raise FileNotFoundError(f"❌ No config.json found in {model_dir}. Did you run the download script?")
+
+        # Hugging Face expects a string path
+        model_path_str = str(model_dir)
 
         # Load tokenizer + model from local folder
         self.tokenizer = AutoTokenizer.from_pretrained(model_path_str, local_files_only=True)
