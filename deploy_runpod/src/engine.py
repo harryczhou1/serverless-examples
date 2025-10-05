@@ -15,7 +15,7 @@ class HFEngine:
         # Sanity check: make sure config.json exists
         config_file = model_dir / "config.json"
         if not config_file.exists():
-            raise FileNotFoundError(f"❌ No config.json found in {model_dir}. Did you run the download script?")
+            raise FileNotFoundError(f"No config.json found in {model_dir}.")
 
         # Hugging Face expects a string path
         model_path_str = str(model_dir)
