@@ -22,7 +22,7 @@ RUN python3 -m pip install --upgrade pip \
  && python3 -m pip install --no-cache-dir -r /requirements.txt
 
 # Download model into /model so runtime loading works
-RUN python3 /download_hf_model.py || echo "⚠️ Warning: download failed at build"
+RUN python3 /download_hf_model.py || echo "Warning: download failed at build"
 
 # Run the handler (serverless entrypoint)
 CMD ["python3", "-u", "/src/handler.py"]
